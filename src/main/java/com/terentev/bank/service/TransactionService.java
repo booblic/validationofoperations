@@ -1,10 +1,10 @@
 package com.terentev.bank.service;
 
-import com.terentev.bank.exception.CustomerNotExistException;
+import com.terentev.bank.entity.Customer;
 import com.terentev.bank.exception.ValidationTransactionException;
 import com.terentev.bank.repository.CustomerLimitRepository;
 import com.terentev.bank.repository.RejectedTransactionRepository;
-import com.terentev.bank.validator.ValidatorInputList;
+import com.terentev.bank.validator.Validator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -20,7 +20,7 @@ public class TransactionService {
 
     Logger log = LogManager.getLogger(TransactionService.class);
 
-    private ValidatorInputList validatorInputList = new ValidatorInputList();
+    private Validator validator = new Validator();
 
     private CustomerLimitRepository customerLimitRepository = new CustomerLimitRepository();
 
@@ -29,41 +29,48 @@ public class TransactionService {
     /**
      * Method for validation of the transactions, getting corresponding limit and calculations and set new limit value
      *
-     * @param transactions - list of transactions (Kazuo,Ishiguro,kazuo@literature.com,100,P123)
+     * @param transactions - list of transactions (Kazuo,Ishiguro,kazuo@literature.com,20,P100 Kazuo,Ishiguro,kazuo@literature.com,100,P101 ...)
      */
-    public void doTransaction(List<String> transactions) {
+    public void sendTransactions(List<String> transactions) {
 
-        try {
-            validatorInputList.validateTransactions(transactions);
-        } catch (ValidationTransactionException e) {
-            log.error(e);
-            return;
-        }
+        for (String transaction: transactions) {
 
-        List<String> limits = null;
-        try {
-            limits = customerLimitRepository.getLimits(transactions);
-        } catch (CustomerNotExistException e) {
-            log.error(e);
-            return;
-        }
+            try {
+                validator.validateTransactions(transaction);
+            } catch (ValidationTransactionException e) {
+                log.error(e);
+                return;
+            }
 
-        Integer changeSum = Integer.parseInt(transactions.get(3));
+            String[] elementTransaction = transaction.split("\\s*,\\s*");
 
-        Integer limitSum = Integer.parseInt(limits.get(3));
+            Customer customer = new Customer();
+            customer.setFirstName(elementTransaction[0]);
+            customer.setSecondName(elementTransaction[1]);
+            customer.setEmail(elementTransaction[2]);
 
-        if (changeSum <= limitSum) {
+            Integer limit = customerLimitRepository.getLimit(customer);
 
-            Integer newLimit = limitSum - changeSum;
-            customerLimitRepository.changeLimits(limits, newLimit.toString());
-            log.info("approved=" + transactions.get(4));
+            if (limit == null) {
+                try {
+                    throw new ClassNotFoundException("Customer: " + customer.toString() + " not found!");
+                } catch (ClassNotFoundException e) {
+                    log.error(e);
+                    return;
+                }
+            }
 
-        } else {
+            Integer transactionSum = Integer.parseInt(elementTransaction[3]);
 
-            rejectedTransactionRepository.addRejectedTransactions(transactions);
-            log.debug("Transactions: " + transactions + " add in rejected Transactions Repository");
-            log.info("rejected=" + transactions.get(4));
-            System.out.println(transactions);
+            if (limit < transactionSum) {
+                log.error("rejected=" + elementTransaction[4]);
+                rejectedTransactionRepository.addRejectedTransactions(transaction);
+                System.out.println(transaction);
+            } else {
+                Integer newLimit = limit - transactionSum;
+                customerLimitRepository.setLimits(customer, newLimit);
+                log.info("approved=" + elementTransaction[4]);
+            }
         }
     }
 }

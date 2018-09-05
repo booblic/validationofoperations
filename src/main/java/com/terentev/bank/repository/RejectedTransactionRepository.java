@@ -11,13 +11,13 @@ import java.util.List;
  */
 public class RejectedTransactionRepository {
 
-    private static List<List<String>> rejectedTransactions = new ArrayList<>();
+    private static List<String> rejectedTransactions = new ArrayList<>();
 
-    public void addRejectedTransactions(List<String> transactions) {
-        rejectedTransactions.add(transactions);
+    public void addRejectedTransactions(String transaction) {
+        rejectedTransactions.add(transaction);
     }
 
-    public List<List<String>> getRejectedTransactions() {
+    public List<String> getRejectedTransactions() {
         return rejectedTransactions;
     }
 }
