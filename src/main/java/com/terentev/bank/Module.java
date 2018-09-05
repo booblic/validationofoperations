@@ -1,6 +1,7 @@
 package com.terentev.bank;
 
 import com.terentev.bank.repository.CustomerLimitRepository;
+import com.terentev.bank.repository.RejectedTransactionRepository;
 import com.terentev.bank.service.TransactionService;
 
 import java.io.BufferedReader;
@@ -14,10 +15,30 @@ import java.util.List;
 public class Module {
 
     public static void main(String[] args) {
+        Module module = new Module();
+        List<String> limitList = module.parseLimits();
+        List<String> transactionList = module.parseTransaction();
+        module.action(limitList, transactionList);
+    }
+
+    public List<String> action(List<String> limitList, List<String> transactionList) {
+
+        CustomerLimitRepository customerLimitRepository = new CustomerLimitRepository();
+
+        TransactionService transactionService = new TransactionService();
+
+        customerLimitRepository.addLimits(limitList);
+
+        transactionService.performTransactions(transactionList);
+
+        RejectedTransactionRepository rejectedTransactionRepository = new RejectedTransactionRepository();
+
+        return rejectedTransactionRepository.getRejectedTransactions();
+    }
+
+    public List<String> parseLimits() {
 
         List<String> limitList = new ArrayList<>();
-
-        List<String> transactionList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
@@ -29,11 +50,12 @@ public class Module {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return limitList;
+    }
 
-        CustomerLimitRepository customerLimitRepository = new CustomerLimitRepository();
+    public List<String> parseTransaction() {
 
-        customerLimitRepository.addLimits(limitList);
-
+        List<String> transactionList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
@@ -45,10 +67,6 @@ public class Module {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        TransactionService transactionService = new TransactionService();
-
-        transactionService.sendTransactions(transactionList);
-
+        return transactionList;
     }
 }

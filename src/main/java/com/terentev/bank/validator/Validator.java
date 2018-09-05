@@ -29,7 +29,7 @@ public class Validator {
      */
     public void validateLimits(String limit) throws ValidationLimitException {
 
-        String[] limitElements = limit.split("\\s*,\\s*");
+        String[] limitElements = limit.split(",");
 
         Matcher firstNameMatcher = namePattern.matcher(limitElements[0]);
 
@@ -52,7 +52,7 @@ public class Validator {
      */
     public void validateTransactions(String transaction) throws ValidationTransactionException {
 
-        String[] transactionElements = transaction.split("\\s*,\\s*");
+        String[] transactionElements = transaction.split(",");
 
         Matcher firstNameMatcher = namePattern.matcher(transactionElements[0]);
 

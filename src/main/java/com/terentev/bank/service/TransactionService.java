@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class TransactionService {
 
-    Logger log = LogManager.getLogger(TransactionService.class);
+    private Logger log = LogManager.getLogger(TransactionService.class);
 
     private Validator validator = new Validator();
 
@@ -31,7 +31,7 @@ public class TransactionService {
      *
      * @param transactions - list of transactions (Kazuo,Ishiguro,kazuo@literature.com,20,P100 Kazuo,Ishiguro,kazuo@literature.com,100,P101 ...)
      */
-    public void sendTransactions(List<String> transactions) {
+    public void performTransactions(List<String> transactions) {
 
         for (String transaction: transactions) {
 
@@ -42,12 +42,12 @@ public class TransactionService {
                 return;
             }
 
-            String[] elementTransaction = transaction.split("\\s*,\\s*");
+            String[] elementTransactions = transaction.split(",");
 
             Customer customer = new Customer();
-            customer.setFirstName(elementTransaction[0]);
-            customer.setSecondName(elementTransaction[1]);
-            customer.setEmail(elementTransaction[2]);
+            customer.setFirstName(elementTransactions[0]);
+            customer.setSecondName(elementTransactions[1]);
+            customer.setEmail(elementTransactions[2]);
 
             Integer limit = customerLimitRepository.getLimit(customer);
 
@@ -60,16 +60,15 @@ public class TransactionService {
                 }
             }
 
-            Integer transactionSum = Integer.parseInt(elementTransaction[3]);
+            Integer transactionSum = Integer.parseInt(elementTransactions[3]);
 
             if (limit < transactionSum) {
-                log.error("rejected=" + elementTransaction[4]);
+                log.error("rejected=" + elementTransactions[4]);
                 rejectedTransactionRepository.addRejectedTransactions(transaction);
-                System.out.println(transaction);
             } else {
                 Integer newLimit = limit - transactionSum;
                 customerLimitRepository.setLimits(customer, newLimit);
-                log.info("approved=" + elementTransaction[4]);
+                log.info("approved=" + elementTransactions[4]);
             }
         }
     }

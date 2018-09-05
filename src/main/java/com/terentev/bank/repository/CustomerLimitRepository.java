@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class CustomerLimitRepository {
 
-    Logger log = LogManager.getLogger(CustomerLimitRepository.class);
+    private Logger log = LogManager.getLogger(CustomerLimitRepository.class);
 
     private Validator validator = new Validator();
 
@@ -41,14 +41,16 @@ public class CustomerLimitRepository {
                 return;
             }
 
-            String[] limitElement = limit.split("\\s*,\\s*");
+            String[] limitElements = limit.split(",");
 
             Customer customer = new Customer();
-            customer.setFirstName(limitElement[0]);
-            customer.setSecondName(limitElement[1]);
-            customer.setEmail(limitElement[2]);
+            customer.setFirstName(limitElements[0]);
+            customer.setSecondName(limitElements[1]);
+            customer.setEmail(limitElements[2]);
 
-            customerLimit.put(customer, Integer.parseInt(limitElement[3]));
+            Integer limitValue = Integer.parseInt(limitElements[3]);
+
+            customerLimit.put(customer, limitValue);
         }
     }
 
