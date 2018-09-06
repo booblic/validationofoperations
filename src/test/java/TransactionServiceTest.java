@@ -1,10 +1,7 @@
 import com.terentev.bank.entity.Customer;
 import com.terentev.bank.repository.CustomerLimitRepository;
 import com.terentev.bank.service.TransactionService;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +12,8 @@ public class TransactionServiceTest {
 
     private static TransactionService transactionService;
 
-    @Before
-    public void initTest() {
+    @BeforeClass
+    public static void initTest() {
         customerLimitRepository = new CustomerLimitRepository();
         List<String> limits = new ArrayList<>();
         limits.add("Kazuo,Ishiguro,kazuo@literature.com,200");
@@ -26,8 +23,8 @@ public class TransactionServiceTest {
         transactionService = new TransactionService();
     }
 
-    @After
-    public void afterTest() {
+    @AfterClass
+    public static void afterTest() {
         customerLimitRepository = null;
         transactionService = null;
     }
@@ -59,6 +56,6 @@ public class TransactionServiceTest {
         customer.setSecondName("Ishiguro");
         customer.setEmail("kazuo@literature.com");
 
-        Assert.assertEquals(new Integer(200), customerLimitRepository.getLimit(customer));
+        Assert.assertEquals(new Integer(150), customerLimitRepository.getLimit(customer));
     }
 }

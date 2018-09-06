@@ -44,6 +44,7 @@ public class TransactionService {
                 return;
             } catch (ValidationCustomerException e) {
                 log.error(e);
+                return;
             }
 
             String[] elementTransactions = transaction.split(",");
@@ -60,7 +61,7 @@ public class TransactionService {
                     throw new CustomerNotExistException("Customer: " + customer.toString() + " not found!");
                 } catch (CustomerNotExistException e) {
                     log.error(e);
-                    return;
+                    continue;
                 }
             }
 

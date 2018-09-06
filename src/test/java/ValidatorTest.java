@@ -2,23 +2,11 @@ import com.terentev.bank.exception.ValidationCustomerException;
 import com.terentev.bank.exception.ValidationLimitException;
 import com.terentev.bank.exception.ValidationTransactionException;
 import com.terentev.bank.validator.Validator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 public class ValidatorTest {
 
-    private static Validator validator;
-
-    @Before
-    public void initTest() {
-        validator = new Validator();
-    }
-
-    @After
-    public void afterTest() {
-        validator = null;
-    }
+    private static Validator validator = new Validator();
 
     @Test
     public void validateLimitsNormalTest() throws ValidationLimitException, ValidationCustomerException {

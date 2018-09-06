@@ -1,10 +1,7 @@
 import com.terentev.bank.entity.Customer;
 import com.terentev.bank.exception.CustomerNotExistException;
 import com.terentev.bank.repository.CustomerLimitRepository;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.xml.ws.soap.Addressing;
 import java.util.ArrayList;
@@ -14,13 +11,13 @@ public class CustomerLimitRepositoryTest {
 
     private static CustomerLimitRepository customerLimitRepository;
 
-    @Before
-    public void initTest() {
+    @BeforeClass
+    public static void initTest() {
         customerLimitRepository = new CustomerLimitRepository();
     }
 
-    @After
-    public void afterTest() {
+    @AfterClass
+    public static void afterTest() {
         customerLimitRepository = null;
     }
 

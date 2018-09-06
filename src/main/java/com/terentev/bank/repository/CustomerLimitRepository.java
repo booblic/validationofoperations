@@ -42,6 +42,7 @@ public class CustomerLimitRepository {
                 return;
             } catch (ValidationCustomerException e) {
                 log.error(e);
+                continue;
             }
 
             String[] limitElements = limit.split(",");
