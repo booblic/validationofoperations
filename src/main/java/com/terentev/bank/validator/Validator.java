@@ -27,6 +27,7 @@ public class Validator {
      *
      * @param limit - string of limit (Kazuo,Ishiguro,kazuo@literature.com,500)
      * @throws ValidationLimitException
+     * @throws ValidationCustomerException
      */
     public void validateLimits(String limit) throws ValidationLimitException, ValidationCustomerException {
 
@@ -42,10 +43,11 @@ public class Validator {
     }
 
     /**
-     * Method for validation of the transactions, getting corresponding limit and calculations and set new limit value
+     * Method for validation of the transactions
      *
      * @param transaction - string of transactions (Kazuo,Ishiguro,kazuo@literature.com,100,P123)
      * @throws ValidationTransactionException
+     * @throws ValidationCustomerException
      */
     public void validateTransactions(String transaction) throws ValidationTransactionException, ValidationCustomerException {
 
@@ -60,6 +62,14 @@ public class Validator {
         }
     }
 
+    /**
+     * Method for validation of the customer data
+     *
+     * @param firstName - customer first name (Kazuo)
+     * @param lastName - customer last name (Ishiguro)
+     * @param email - customer email (kazuo@literature.com)
+     * @throws ValidationCustomerException
+     */
     private void validateCustomer(String firstName, String lastName, String email) throws ValidationCustomerException {
 
         Matcher firstNameMatcher = namePattern.matcher(firstName);

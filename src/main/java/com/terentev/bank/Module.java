@@ -21,6 +21,14 @@ public class Module {
         module.action(limitList, transactionList);
     }
 
+    /**
+     * Method for parse limits.csv
+     *
+     * @param limitList - list limits (Kazuo,Ishiguro,kazuo@literature.com,500)
+     * @param transactionList - list transactions (Kazuo,Ishiguro,kazuo@literature.com,100,P123)
+     *
+     * @return - list rejected transactions (Kazuo,Ishiguro,kazuo@literature.com,100,P123)
+     */
     public List<String> action(List<String> limitList, List<String> transactionList) {
 
         CustomerLimitRepository customerLimitRepository = new CustomerLimitRepository();
@@ -36,6 +44,11 @@ public class Module {
         return rejectedTransactionRepository.getRejectedTransactions();
     }
 
+    /**
+     * Method for parse limits.csv
+     *
+     * @return - list limits (Kazuo,Ishiguro,kazuo@literature.com,500)
+     */
     public List<String> parseLimits() {
 
         List<String> limitList = new ArrayList<>();
@@ -53,6 +66,11 @@ public class Module {
         return limitList;
     }
 
+    /**
+     * Method for parse transactions.csv
+     *
+     * @return - list transactions (Kazuo,Ishiguro,kazuo@literature.com,100,P123)
+     */
     public List<String> parseTransaction() {
 
         List<String> transactionList = new ArrayList<>();
