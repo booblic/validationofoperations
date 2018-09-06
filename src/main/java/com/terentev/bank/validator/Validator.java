@@ -1,5 +1,6 @@
 package com.terentev.bank.validator;
 
+import com.terentev.bank.exception.ValidationCustomerException;
 import com.terentev.bank.exception.ValidationLimitException;
 import com.terentev.bank.exception.ValidationTransactionException;
 
@@ -27,20 +28,16 @@ public class Validator {
      * @param limit - string of limit (Kazuo,Ishiguro,kazuo@literature.com,500)
      * @throws ValidationLimitException
      */
-    public void validateLimits(String limit) throws ValidationLimitException {
+    public void validateLimits(String limit) throws ValidationLimitException, ValidationCustomerException {
 
         String[] limitElements = limit.split(",");
 
-        Matcher firstNameMatcher = namePattern.matcher(limitElements[0]);
-
-        Matcher secondNameMatcher = namePattern.matcher(limitElements[1]);
-
-        Matcher emailMatcher = emailPattern.matcher(limitElements[2]);
+        validateCustomer(limitElements[0], limitElements[1], limitElements[2]);
 
         Matcher sumMatcher = sumPattern.matcher(limitElements[3]);
 
-        if (!firstNameMatcher.find() || !secondNameMatcher.find() || !emailMatcher.find() || !sumMatcher.find()) {
-            throw new ValidationLimitException("Limit " + Arrays.toString(limitElements) + " not valid!");
+        if (!sumMatcher.find()) {
+            throw new ValidationLimitException("Limit " + limitElements[3] + " not valid!");
         }
     }
 
@@ -50,20 +47,29 @@ public class Validator {
      * @param transaction - string of transactions (Kazuo,Ishiguro,kazuo@literature.com,100,P123)
      * @throws ValidationTransactionException
      */
-    public void validateTransactions(String transaction) throws ValidationTransactionException {
+    public void validateTransactions(String transaction) throws ValidationTransactionException, ValidationCustomerException {
 
         String[] transactionElements = transaction.split(",");
 
-        Matcher firstNameMatcher = namePattern.matcher(transactionElements[0]);
-
-        Matcher secondNameMatcher = namePattern.matcher(transactionElements[1]);
-
-        Matcher emailMatcher = emailPattern.matcher(transactionElements[2]);
+        validateCustomer(transactionElements[0], transactionElements[1], transactionElements[2]);
 
         Matcher sumMatcher = sumPattern.matcher(transactionElements[3]);
 
-        if (!firstNameMatcher.find() || !secondNameMatcher.find() || !emailMatcher.find() || !sumMatcher.find()) {
-            throw new ValidationTransactionException("Transaction " + Arrays.toString(transactionElements) + " not valid!");
+        if (!sumMatcher.find()) {
+            throw new ValidationTransactionException("Transaction sum " + transactionElements[3] + " not valid!");
+        }
+    }
+
+    private void validateCustomer(String firstName, String lastName, String email) throws ValidationCustomerException {
+
+        Matcher firstNameMatcher = namePattern.matcher(firstName);
+
+        Matcher secondNameMatcher = namePattern.matcher(lastName);
+
+        Matcher emailMatcher = emailPattern.matcher(email);
+
+        if (!firstNameMatcher.find() || !secondNameMatcher.find() || !emailMatcher.find()) {
+            throw new ValidationCustomerException("Customer data " + firstName + ", " + lastName + ", " + email + " not valid!");
         }
     }
 }

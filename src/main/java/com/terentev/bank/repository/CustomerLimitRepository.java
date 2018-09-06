@@ -1,6 +1,7 @@
 package com.terentev.bank.repository;
 
 import com.terentev.bank.entity.Customer;
+import com.terentev.bank.exception.ValidationCustomerException;
 import com.terentev.bank.exception.ValidationLimitException;
 import com.terentev.bank.validator.Validator;
 import org.apache.log4j.LogManager;
@@ -39,6 +40,8 @@ public class CustomerLimitRepository {
             } catch (ValidationLimitException e) {
                 log.error(e);
                 return;
+            } catch (ValidationCustomerException e) {
+                log.error(e);
             }
 
             String[] limitElements = limit.split(",");
