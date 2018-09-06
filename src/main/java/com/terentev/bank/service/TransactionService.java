@@ -1,6 +1,7 @@
 package com.terentev.bank.service;
 
 import com.terentev.bank.entity.Customer;
+import com.terentev.bank.exception.CustomerNotExistException;
 import com.terentev.bank.exception.ValidationTransactionException;
 import com.terentev.bank.repository.CustomerLimitRepository;
 import com.terentev.bank.repository.RejectedTransactionRepository;
@@ -53,8 +54,8 @@ public class TransactionService {
 
             if (limit == null) {
                 try {
-                    throw new ClassNotFoundException("Customer: " + customer.toString() + " not found!");
-                } catch (ClassNotFoundException e) {
+                    throw new CustomerNotExistException("Customer: " + customer.toString() + " not found!");
+                } catch (CustomerNotExistException e) {
                     log.error(e);
                     return;
                 }

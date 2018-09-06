@@ -11,9 +11,9 @@ import java.util.List;
 
 public class TransactionServiceTest {
 
-    private CustomerLimitRepository customerLimitRepository;
+    private static CustomerLimitRepository customerLimitRepository;
 
-    private TransactionService transactionService;
+    private static TransactionService transactionService;
 
     @Before
     public void initTest() {
@@ -37,7 +37,7 @@ public class TransactionServiceTest {
         List<String> transactions = new ArrayList<>();
         transactions.add("Kazuo,Ishiguro,kazuo@literature.com,50,P100");
 
-        transactionService.sendTransactions(transactions);
+        transactionService.performTransactions(transactions);
 
         Customer customer = new Customer();
         customer.setFirstName("Kazuo");
@@ -52,7 +52,7 @@ public class TransactionServiceTest {
         List<String> transactions = new ArrayList<>();
         transactions.add("Kazuo,Ishiguro,kazuo@literature.com,300,P101");
 
-        transactionService.sendTransactions(transactions);
+        transactionService.performTransactions(transactions);
 
         Customer customer = new Customer();
         customer.setFirstName("Kazuo");

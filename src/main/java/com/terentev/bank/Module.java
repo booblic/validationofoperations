@@ -42,7 +42,7 @@ public class Module {
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream("input.csv"), StandardCharsets.UTF_8))){
+                        new FileInputStream("src/main/resources/limits.csv"), StandardCharsets.UTF_8))){
             String line;
             while ((line = reader.readLine()) != null) {
                 limitList.add(line);
@@ -59,7 +59,7 @@ public class Module {
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream("transaction.csv"), StandardCharsets.UTF_8))){
+                        new FileInputStream("src/main/resources/transactions.csv"), StandardCharsets.UTF_8))){
             String line;
             while ((line = reader.readLine()) != null) {
                 transactionList.add(line);
